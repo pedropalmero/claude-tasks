@@ -1,0 +1,10 @@
+{
+  "name": "planning",
+  "version": "1.0.0",
+  "description": "Lightweight feature planning workflow for Claude Code",
+  "author": {
+    "name": "Pedro"
+  },
+  "commands": "./commands/",
+  "skills": "./skills/"
+}

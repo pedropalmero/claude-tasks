@@ -1,0 +1,13 @@
+{
+  "name": "claude-tasks",
+  "owner": {
+    "name": "Pedro"
+  },
+  "plugins": [
+    {
+      "name": "planning",
+      "source": "./plugins/planning",
+      "description": "Lightweight feature planning workflow for Claude Code"
+    }
+  ]
+}
