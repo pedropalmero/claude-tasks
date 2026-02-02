@@ -1,6 +1,6 @@
 ---
-name: set
-description: Switch the active feature or list all available features
+name: planning-set
+description: Switch the active feature or list all available features. Use when the user invokes /planning:set to manage .planning feature context.
 ---
 
 # /planning:set - Switch Active Feature
@@ -11,13 +11,13 @@ description: Switch the active feature or list all available features
 /planning:set [feature_name]
 ```
 
-**Examples:**
+Examples:
 - `/planning:set` - List all features and select interactively
 - `/planning:set dark-mode` - Switch to the dark-mode feature
 
 ## Instructions
 
-**CRITICAL: Path Handling**
+CRITICAL: Path Handling
 - ONLY read from exact paths specified below
 - NEVER use Glob/Search to find plan files
 - If `.planning/` directory doesn't exist, immediately suggest `/planning:feature` - do not search for alternatives
@@ -26,10 +26,10 @@ You are switching the active feature context. Follow these steps:
 
 ### Step 1: Check Planning Directory
 
-First, check if `.planning/` directory exists using `ls .planning/` or Read tool.
+First, check if `.planning/` directory exists using `ls .planning/`.
 
 If `.planning/` does NOT exist:
-- Output: "No planning directory found. Run `/planning:feature <name> "<description>"` to start a new feature."
+- Output: `No planning directory found. Run /planning:feature <name> "<description>" to start a new feature.`
 - Stop execution - do not search for alternatives
 
 Then verify `.planning/features/` exists.
@@ -48,9 +48,10 @@ If no feature name provided:
    - Summary (first line after `## Summary`)
    - Type (simple/complex)
    - Status (if present)
-3. Present list using AskUserQuestion for selection
+3. Present list and ask the user to pick one in chat
 
 Display format:
+
 ```
 Available Features:
 1. user-auth - "OAuth login with Google" (complex, 2/5 steps)
@@ -67,6 +68,7 @@ If feature name provided:
 ### Step 4: Update Active Feature
 
 Write the feature name to `.planning/.active`:
+
 ```
 <feature_name>
 ```
@@ -85,6 +87,7 @@ Read and display feature information:
 ```
 
 For complex features, also show:
+
 ```
 **Progress**: <N>/<Total> steps complete
 
@@ -98,13 +101,14 @@ Steps:
 ### Step 6: Suggest Next Action
 
 Based on status:
-- If steps remain: "Run `/planning:step` to continue"
-- If complete: "Feature complete! Consider archiving or starting new feature"
-- If simple and pending: "Run `/planning:step` to implement"
+- If steps remain: `Run /planning:step to continue`
+- If complete: `Feature complete! Consider archiving or starting new feature`
+- If simple and pending: `Run /planning:step to implement`
 
 ## Output Format
 
 ### List Mode (no argument)
+
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📋 Available Features
@@ -123,6 +127,7 @@ Select a feature to switch to, or press Enter to stay on current.
 ```
 
 ### Switch Mode (with argument)
+
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ✅ Switched to: user-auth
@@ -140,22 +145,24 @@ Steps:
 5. ⬜ Write tests
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Run `/planning:step` to continue with Step 3.
+Run /planning:step to continue with Step 3.
 ```
 
 ## Helper Functions
 
 ### Parse Step Status
-To determine step status from plan.md:
+
+To determine step status from `plan.md`:
 - `**Status**: complete` → ✅
 - `**Status**: pending` with incomplete tasks → ⏳ (if first pending)
 - `**Status**: pending` → ⬜
 
 ### Count Progress
+
 Count steps with `**Status**: complete` vs total steps.
 
 ## Error Handling
 
 - No `.planning/` directory: Suggest `/planning:feature`
 - Feature not found: List valid features
-- Corrupted feature.md: Suggest recreating with `/planning:feature`
+- Corrupted `feature.md`: Suggest recreating with `/planning:feature`

@@ -1,6 +1,6 @@
 ---
-name: step
-description: Work on the next step of the active feature plan
+name: planning-step
+description: Work on the next step of the active feature plan. Use when the user invokes /planning:step to implement a planned feature in .planning.
 ---
 
 # /planning:step - Work on Next Step
@@ -11,13 +11,13 @@ description: Work on the next step of the active feature plan
 /planning:step [step_number]
 ```
 
-**Examples:**
+Examples:
 - `/planning:step` - Work on the next incomplete step
 - `/planning:step 2` - Jump to step 2 specifically
 
 ## Instructions
 
-**CRITICAL: Path Handling**
+CRITICAL: Path Handling
 - ONLY read from exact paths specified below
 - NEVER use Glob/Search to find plan files
 - If `.planning/` directory doesn't exist, immediately suggest `/planning:feature` - do not search for alternatives
@@ -26,17 +26,17 @@ You are continuing work on a feature. Follow these steps:
 
 ### Step 1: Verify Planning Directory
 
-First, check if `.planning/` directory exists using `ls .planning/` or Read tool.
+First, check if `.planning/` directory exists using `ls .planning/`.
 
 If `.planning/` does NOT exist:
-- Output: "No planning directory found. Run `/planning:feature <name> "<description>"` to start a new feature."
+- Output: `No planning directory found. Run /planning:feature <name> "<description>" to start a new feature.`
 - Stop execution - do not search for alternatives
 
 If `.planning/` exists, read `.planning/.active` to get the current feature name.
 
 If `.active` doesn't exist or is empty:
 - List available features in `.planning/features/`
-- Use AskUserQuestion to let user select one
+- Ask the user to select one in chat
 - Write selection to `.planning/.active`
 
 ### Step 2: Load Feature Context
@@ -45,9 +45,9 @@ Read the feature files:
 1. `.planning/features/<name>/feature.md` - Requirements and scope
 2. `.planning/features/<name>/plan.md` - Steps (if exists)
 
-**If feature.md doesn't exist:** Error - feature not properly initialized. Suggest `/planning:feature`.
+If `feature.md` doesn't exist: Error - feature not properly initialized. Suggest `/planning:feature`.
 
-**If plan.md doesn't exist:** This is a simple feature. Proceed directly to implementation guidance based on feature.md.
+If `plan.md` doesn't exist: This is a simple feature. Proceed directly to implementation guidance based on `feature.md`.
 
 ### Step 3: Find Current Step
 
@@ -62,6 +62,7 @@ If all steps are complete:
 ### Step 4: Display Step Information
 
 Show the user:
+
 ```
 ## Current Step: <Step Number> - <Title>
 
@@ -77,13 +78,11 @@ Show the user:
 
 ### Step 5: Plan Implementation (Complex Steps)
 
-For steps that involve significant implementation, use the **Task** tool with `subagent_type: "Plan"` to:
-- Analyze the step requirements against the codebase
+For steps that involve significant implementation:
+- Outline a concrete approach
 - Identify specific files to create or modify
-- Propose implementation approach
-- Flag potential issues or dependencies
-
-Present the plan to the user before proceeding.
+- Call out dependencies or risks
+- Ask the user to confirm before editing files
 
 ### Step 6: Guide Implementation
 
@@ -127,16 +126,17 @@ After step completion, suggest:
 
 ## Simple Features
 
-For features without a plan.md (simple features):
+For features without a `plan.md` (simple features):
 
-1. Display feature.md requirements
-2. Use Plan agent if implementation is non-trivial
+1. Display `feature.md` requirements
+2. If implementation is non-trivial, outline the plan and confirm before editing
 3. Guide through implementation
-4. Mark feature as complete in feature.md by adding:
-   ```
-   ## Status
-   complete
-   ```
+4. Mark feature as complete in `feature.md` by adding:
+
+```
+## Status
+complete
+```
 
 ## Error Handling
 

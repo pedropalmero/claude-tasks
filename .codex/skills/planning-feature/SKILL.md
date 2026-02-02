@@ -1,6 +1,6 @@
 ---
-name: feature
-description: Start a new feature with guided planning, clarifying questions, and codebase exploration
+name: planning-feature
+description: Start a new feature with guided planning, clarifying questions, and codebase exploration. Use when the user invokes /planning:feature or wants to create a feature plan in .planning.
 ---
 
 # /planning:feature - Start a New Feature
@@ -11,13 +11,13 @@ description: Start a new feature with guided planning, clarifying questions, and
 /planning:feature <name> "<description>"
 ```
 
-**Examples:**
+Examples:
 - `/planning:feature user-auth "Add OAuth login with Google and GitHub"`
 - `/planning:feature dark-mode "Theme toggle for the application"`
 
 ## Instructions
 
-**CRITICAL: Path Handling**
+CRITICAL: Path Handling
 - ONLY use exact paths specified below (`.planning/`, `.planning/features/<name>/`)
 - NEVER use Glob/Search to find existing plan files
 - This skill creates the `.planning/` directory structure - do not search for alternatives
@@ -30,7 +30,7 @@ Extract from the command:
 - `name`: Feature identifier (kebab-case, e.g., `user-auth`)
 - `description`: Brief description in quotes
 
-If arguments are missing, use AskUserQuestion to get them:
+If arguments are missing, ask the user directly in chat:
 - Ask for feature name if not provided
 - Ask for brief description if not provided
 
@@ -52,21 +52,21 @@ Create the planning structure if it doesn't exist:
 
 ### Step 3: Clarifying Questions (3-5 rounds)
 
-Use the **AskUserQuestion** tool to understand the feature. Ask questions to clarify:
+Ask questions in chat to clarify:
 
-**Round 1 - Core Understanding:**
+Round 1 - Core Understanding:
 - What problem does this solve?
 - Who is the primary user?
 
-**Round 2 - Scope:**
+Round 2 - Scope:
 - What are the must-have requirements?
 - What is explicitly out of scope?
 
-**Round 3 - Technical Context:**
+Round 3 - Technical Context:
 - Are there existing patterns to follow?
 - Any specific constraints (performance, compatibility)?
 
-**Round 4-5 (if needed):**
+Round 4-5 (if needed):
 - Edge cases or error handling
 - Integration points with existing systems
 
@@ -74,24 +74,22 @@ Keep questions focused and actionable. Stop when you have enough clarity.
 
 ### Step 4: Explore Codebase
 
-Use the **Task** tool with `subagent_type: "Explore"` to understand:
+Inspect the codebase using shell tools (prefer `rg`, `ls`, `cat`) to find:
 - Existing patterns relevant to this feature
 - Key files that will be affected or referenced
 - Similar implementations to learn from
-
-Prompt the Explore agent with specifics about what patterns and files to look for based on the feature description.
 
 ### Step 5: Determine Complexity
 
 Based on gathered information, determine if this is:
 
-**Simple Feature** (one-shot implementation):
+Simple Feature (one-shot implementation):
 - Can be completed in a single focused session
 - Clear, contained scope
 - Few files affected
 - No complex dependencies
 
-**Complex Feature** (multi-step plan needed):
+Complex Feature (multi-step plan needed):
 - Multiple distinct phases
 - Affects many parts of the codebase
 - Requires careful sequencing
@@ -138,7 +136,7 @@ Create `.planning/features/<name>/feature.md` using this template:
 If the feature is complex, create `.planning/features/<name>/plan.md`:
 
 1. Propose 3-7 steps that logically sequence the work
-2. Present the proposed steps to the user via AskUserQuestion
+2. Present the proposed steps to the user in chat
 3. Refine based on feedback
 4. Write the plan using this template:
 
@@ -169,6 +167,7 @@ If the feature is complex, create `.planning/features/<name>/plan.md`:
 ### Step 8: Set Active Feature
 
 Write the feature name to `.planning/.active`:
+
 ```
 <name>
 ```
